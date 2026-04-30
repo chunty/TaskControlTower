@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ConcurrencyManager.EntityFrameworkCore/ConcurrencyManager.EntityFrameworkCore.csproj" />
+  <Project Path="ConcurrencyManager/ConcurrencyManager.csproj" />
+</Solution>
