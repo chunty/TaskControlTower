@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TaskTurnstile.Redis/TaskTurnstile.Redis.csproj" />
+  <Project Path="TaskTurnstile.SqlServer/TaskTurnstile.SqlServer.csproj" />
+  <Project Path="TaskTurnstile.Tests/TaskTurnstile.Tests.csproj" />
+  <Project Path="TaskTurnstile/TaskTurnstile.csproj" />
+  <Project Path="samples/FileStore/FileStore.csproj" />
+</Solution>

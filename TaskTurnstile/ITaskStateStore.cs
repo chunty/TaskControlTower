@@ -1,4 +1,4 @@
-namespace TaskControlTower;
+namespace TaskTurnstile;
 
 public interface ITaskStateStore
 {

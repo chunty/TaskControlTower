@@ -1,6 +1,6 @@
-namespace TaskControlTower;
+namespace TaskTurnstile;
 
-public sealed class TaskControlTowerOptions
+public sealed class TaskTurnstileOptions
 {
     /// <summary>Default MaxRuntime applied when StartAsync is called without an explicit maxRuntime. Null means no expiry.</summary>
     public TimeSpan? DefaultMaxRuntime { get; set; }

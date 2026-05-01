@@ -1,46 +1,46 @@
-using TaskControlTower.DependencyInjection;
+using TaskTurnstile.DependencyInjection;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 
-namespace TaskControlTower.Tests.DependencyInjection;
+namespace TaskTurnstile.Tests.DependencyInjection;
 
 public class ServiceCollectionExtensionsTests
 {
     // ── Registration ──────────────────────────────────────────────────────────
 
     [Fact]
-    public void AddTaskControlTower_RegistersITaskStateManager()
+    public void AddTaskTurnstile_RegistersITaskStateManager()
     {
-        var sp = new ServiceCollection().AddTaskControlTower().Services.BuildServiceProvider();
+        var sp = new ServiceCollection().AddTaskTurnstile().Services.BuildServiceProvider();
         Assert.NotNull(sp.GetService<ITaskStateManager>());
     }
 
     [Fact]
-    public void AddTaskControlTower_RegistersITaskStateStore()
+    public void AddTaskTurnstile_RegistersITaskStateStore()
     {
-        var sp = new ServiceCollection().AddTaskControlTower().Services.BuildServiceProvider();
+        var sp = new ServiceCollection().AddTaskTurnstile().Services.BuildServiceProvider();
         Assert.NotNull(sp.GetService<ITaskStateStore>());
     }
 
     // ── CleanupOnStartup ──────────────────────────────────────────────────────
 
     [Fact]
-    public void AddTaskControlTower_CleanupOnStartup_True_RegistersHostedService()
+    public void AddTaskTurnstile_CleanupOnStartup_True_RegistersHostedService()
     {
         var sp = new ServiceCollection()
-            .AddTaskControlTower(o => o.CleanupOnStartup = true)
+            .AddTaskTurnstile(o => o.CleanupOnStartup = true)
             .Services.BuildServiceProvider();
 
         Assert.Contains(sp.GetServices<IHostedService>(), s => s is CleanupOnStartupHostedService);
     }
 
     [Fact]
-    public void AddTaskControlTower_CleanupOnStartup_False_DoesNotRegisterHostedService()
+    public void AddTaskTurnstile_CleanupOnStartup_False_DoesNotRegisterHostedService()
     {
         var sp = new ServiceCollection()
-            .AddTaskControlTower(o => o.CleanupOnStartup = false)
+            .AddTaskTurnstile(o => o.CleanupOnStartup = false)
             .Services.BuildServiceProvider();
 
         Assert.DoesNotContain(sp.GetServices<IHostedService>(), s => s is CleanupOnStartupHostedService);
@@ -68,7 +68,7 @@ public class ServiceCollectionExtensionsTests
 
         var sp = new ServiceCollection()
             .AddSingleton<IDistributedCache>(appCache)
-            .AddTaskControlTower().AddDistributedStore()
+            .AddTaskTurnstile().AddDistributedStore()
             .Services.BuildServiceProvider();
 
         var store = sp.GetRequiredService<ITaskStateStore>();
@@ -85,7 +85,7 @@ public class ServiceCollectionExtensionsTests
         var customStore = Substitute.For<ITaskStateStore>();
 
         var sp = new ServiceCollection()
-            .AddTaskControlTower().UseTaskStateStore(_ => customStore)
+            .AddTaskTurnstile().UseTaskStateStore(_ => customStore)
             .Services.BuildServiceProvider();
 
         Assert.Same(customStore, sp.GetRequiredService<ITaskStateStore>());
@@ -98,7 +98,7 @@ public class ServiceCollectionExtensionsTests
         var second = Substitute.For<ITaskStateStore>();
 
         var sp = new ServiceCollection()
-            .AddTaskControlTower()
+            .AddTaskTurnstile()
             .UseTaskStateStore(_ => first)
             .UseTaskStateStore(_ => second)
             .Services.BuildServiceProvider();

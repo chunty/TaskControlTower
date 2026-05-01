@@ -4,11 +4,11 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>TaskControlTower.SqlServer</PackageId>
+    <PackageId>TaskTurnstile.SqlServer</PackageId>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
-      SQL Server backing store for TaskControlTower via IDistributedCache.
+      SQL Server backing store for TaskTurnstile via IDistributedCache.
       Supports dedicated SQL Server instances independent of the app's own cache.
       Requires the cache table to be pre-created with the dotnet sql-cache CLI tool.
     </Description>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskControlTower\TaskControlTower.csproj" />
+    <ProjectReference Include="..\TaskTurnstile\TaskTurnstile.csproj" />
   </ItemGroup>
 
   <ItemGroup>

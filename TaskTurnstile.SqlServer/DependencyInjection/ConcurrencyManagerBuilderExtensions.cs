@@ -1,9 +1,9 @@
-using TaskControlTower.DependencyInjection;
+using TaskTurnstile.DependencyInjection;
 using Microsoft.Extensions.Caching.SqlServer;
 
-namespace TaskControlTower.SqlServer.DependencyInjection;
+namespace TaskTurnstile.SqlServer.DependencyInjection;
 
-public static class TaskControlTowerBuilderExtensions
+public static class TaskTurnstileBuilderExtensions
 {
     /// <summary>
     /// Uses a dedicated SQL Server distributed cache as the backing store, isolated from any
@@ -11,16 +11,16 @@ public static class TaskControlTowerBuilderExtensions
     /// The cache table must exist — create it with: dotnet sql-cache create "connection" schema table
     /// </summary>
     /// <example>
-    /// services.AddTaskControlTower()
+    /// services.AddTaskTurnstile()
     ///         .AddSqlServerStore(o =>
     ///         {
     ///             o.ConnectionString = "Server=...";
     ///             o.SchemaName = "dbo";
-    ///             o.TableName = "TaskControlTowerCache";
+    ///             o.TableName = "TaskTurnstileCache";
     ///         });
     /// </example>
-    public static TaskControlTowerBuilder AddSqlServerStore(
-        this TaskControlTowerBuilder builder,
+    public static TaskTurnstileBuilder AddSqlServerStore(
+        this TaskTurnstileBuilder builder,
         Action<SqlServerCacheOptions> configure)
     {
         return builder.AddDistributedStore(_ =>

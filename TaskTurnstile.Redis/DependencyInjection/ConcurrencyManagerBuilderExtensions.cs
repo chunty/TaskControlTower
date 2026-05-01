@@ -1,20 +1,20 @@
-using TaskControlTower.DependencyInjection;
+using TaskTurnstile.DependencyInjection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 
-namespace TaskControlTower.Redis.DependencyInjection;
+namespace TaskTurnstile.Redis.DependencyInjection;
 
-public static class TaskControlTowerBuilderExtensions
+public static class TaskTurnstileBuilderExtensions
 {
     /// <summary>
     /// Uses a dedicated Redis cache as the backing store, isolated from any other Redis cache
     /// the app may have registered.
     /// </summary>
     /// <example>
-    /// services.AddTaskControlTower()
+    /// services.AddTaskTurnstile()
     ///         .AddRedisStore(o => o.Configuration = "localhost:6379");
     /// </example>
-    public static TaskControlTowerBuilder AddRedisStore(
-        this TaskControlTowerBuilder builder,
+    public static TaskTurnstileBuilder AddRedisStore(
+        this TaskTurnstileBuilder builder,
         Action<RedisCacheOptions> configure)
     {
         return builder.AddDistributedStore(_ =>
