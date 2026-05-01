@@ -2,7 +2,7 @@
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
-> **Think of it like an air traffic control tower.** Every job that wants to run must request clearance first. The tower knows exactly what's in the air — only one flight can hold a given slot at a time, others are told to wait or come back later. When a flight lands, the slot is released and the next one can take off.
+> **Think of it like a turnstile.** Every job that wants to run must push through first. Only one can hold the bar at a time — others wait their turn or are sent away. When the job is done, the bar rotates and the next one can step through.
 
 ## Why?
 
