@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/*
+/*/bin/*
+/*/obj/*
+/*/obj/ConcurrencyManager.csproj.nuget.dgspec.json
+/*/obj/ConcurrencyManager.csproj.nuget.g.targets
+/*/obj/project.assets.json
+/*/obj/project.nuget.cache
+/*/obj/*
+/ConcurrencyManager.Redis/bin/*
+/ConcurrencyManager.Redis/obj/Debug/net10.0/ref/ConcurrencyManager.Redis.dll

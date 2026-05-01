@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="ConcurrencyManager.EntityFrameworkCore/ConcurrencyManager.EntityFrameworkCore.csproj" />
+  <Project Path="ConcurrencyManager.Redis/ConcurrencyManager.Redis.csproj" />
+  <Project Path="ConcurrencyManager.SqlServer/ConcurrencyManager.SqlServer.csproj" />
+  <Project Path="ConcurrencyManager.Tests/ConcurrencyManager.Tests.csproj" />
   <Project Path="ConcurrencyManager/ConcurrencyManager.csproj" />
 </Solution>

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>ConcurrencyManager.SqlServer</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Chris Hunt</Authors>
+    <Company>TappetyClick</Company>
+    <Description>
+      SQL Server backing store for ConcurrencyManager via IDistributedCache.
+      Supports dedicated SQL Server instances independent of the app's own cache.
+      Requires the cache table to be pre-created with the dotnet sql-cache CLI tool.
+    </Description>
+    <PackageTags>Concurrency, Background Tasks, Named Lock, SQL Server, Distributed Cache</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConcurrencyManager\ConcurrencyManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="10.0.7" />
+  </ItemGroup>
+
+</Project>
