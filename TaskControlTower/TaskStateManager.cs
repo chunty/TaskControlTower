@@ -3,9 +3,9 @@ using AsyncKeyedLock;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace ConcurrencyManager;
+namespace TaskControlTower;
 
-internal sealed class ConcurrencyManager(ITaskStateStore store, ConcurrencyManagerOptions options) : IConcurrencyManager
+internal sealed class TaskStateManager(ITaskStateStore store, TaskControlTowerOptions options) : ITaskStateManager
 {
     private readonly AsyncKeyedLocker<string> _locker = new();
     private readonly IMemoryCache _localCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

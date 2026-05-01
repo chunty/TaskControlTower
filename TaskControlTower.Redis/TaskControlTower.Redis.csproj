@@ -1,14 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>ConcurrencyManager.Redis</PackageId>
+    <PackageId>TaskControlTower.Redis</PackageId>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
-      Redis backing store for ConcurrencyManager via StackExchange.Redis and IDistributedCache.
+      Redis backing store for TaskControlTower via StackExchange.Redis and IDistributedCache.
       Supports dedicated Redis instances independent of the app's own cache.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConcurrencyManager\ConcurrencyManager.csproj" />
+    <ProjectReference Include="..\TaskControlTower\TaskControlTower.csproj" />
   </ItemGroup>
 
   <ItemGroup>

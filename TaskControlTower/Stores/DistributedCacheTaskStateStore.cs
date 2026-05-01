@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace ConcurrencyManager.Stores;
+namespace TaskControlTower.Stores;
 
 internal sealed class DistributedCacheTaskStateStore(IDistributedCache cache, string keyPrefix = "cm:") : ITaskStateStore
 {

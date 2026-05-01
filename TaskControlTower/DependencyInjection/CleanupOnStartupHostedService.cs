@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace ConcurrencyManager.DependencyInjection;
+namespace TaskControlTower.DependencyInjection;
 
 internal sealed class CleanupOnStartupHostedService(ITaskStateStore store) : IHostedService
 {

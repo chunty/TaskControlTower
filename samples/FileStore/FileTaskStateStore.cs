@@ -1,4 +1,4 @@
-using ConcurrencyManager;
+using TaskControlTower;
 using Microsoft.Extensions.DependencyInjection;
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 public sealed class FileTaskStateStore(string directory) : ITaskStateStore
 {
-    public FileTaskStateStore() : this(Path.Combine(Path.GetTempPath(), "concurrency-manager")) { }
+    public FileTaskStateStore() : this(Path.Combine(Path.GetTempPath(), "task-control-tower")) { }
 
     private string LockFile(string taskName) =>
         Path.Combine(directory, $"{taskName}.lock");
@@ -86,10 +86,10 @@ public sealed class FileTaskStateStore(string directory) : ITaskStateStore
 // Registration — wire it up via UseTaskStateStore<T>()
 // ──────────────────────────────────────────────────────────────────────────────
 
-// services.AddConcurrencyManager(o => o.CleanupOnStartup = true)
+// services.AddTaskControlTower(o => o.CleanupOnStartup = true)
 //         .UseTaskStateStore<FileTaskStateStore>();
 //
 // Or with a factory if you need to pass the directory:
 //
-// services.AddConcurrencyManager(o => o.CleanupOnStartup = true)
+// services.AddTaskControlTower(o => o.CleanupOnStartup = true)
 //         .UseTaskStateStore(sp => new FileTaskStateStore("/var/run/my-app/locks"));

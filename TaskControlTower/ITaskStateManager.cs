@@ -1,6 +1,6 @@
-namespace ConcurrencyManager;
+namespace TaskControlTower;
 
-public interface IConcurrencyManager
+public interface ITaskStateManager
 {
     /// <summary>Raw data query — returns true if a record exists, regardless of MaxRuntime. Use for observational purposes only.</summary>
     Task<bool> IsRunningAsync(string taskName, CancellationToken cancellationToken = default);

@@ -1,14 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>ConcurrencyManager.SqlServer</PackageId>
+    <PackageId>TaskControlTower.SqlServer</PackageId>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
-      SQL Server backing store for ConcurrencyManager via IDistributedCache.
+      SQL Server backing store for TaskControlTower via IDistributedCache.
       Supports dedicated SQL Server instances independent of the app's own cache.
       Requires the cache table to be pre-created with the dotnet sql-cache CLI tool.
     </Description>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConcurrencyManager\ConcurrencyManager.csproj" />
+    <ProjectReference Include="..\TaskControlTower\TaskControlTower.csproj" />
   </ItemGroup>
 
   <ItemGroup>
