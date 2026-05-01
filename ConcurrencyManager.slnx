@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="ConcurrencyManager.EntityFrameworkCore/ConcurrencyManager.EntityFrameworkCore.csproj" />
+  <Project Path="ConcurrencyManager.EntityFrameworkCore/ConcurrencyManager.EntityFrameworkCore.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="ConcurrencyManager/ConcurrencyManager.csproj" />
 </Solution>
