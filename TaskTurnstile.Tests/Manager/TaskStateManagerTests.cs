@@ -1,5 +1,5 @@
-using TaskControlTower.DependencyInjection;
-using TaskControlTower.Stores;
+using TaskTurnstile.DependencyInjection;
+using TaskTurnstile.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,16 +7,16 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace TaskControlTower.Tests.Manager;
+namespace TaskTurnstile.Tests.Manager;
 
 /// <summary>Unit tests for TaskStateManager using a mock ITaskStateStore.</summary>
 public class TaskStateManagerTests
 {
     private static (TaskStateManager manager, ITaskStateStore store) BuildWithMockStore(
-        TaskControlTowerOptions? options = null)
+        TaskTurnstileOptions? options = null)
     {
         var store = Substitute.For<ITaskStateStore>();
-        var manager = new TaskStateManager(store, options ?? new TaskControlTowerOptions());
+        var manager = new TaskStateManager(store, options ?? new TaskTurnstileOptions());
         return (manager, store);
     }
 
@@ -24,7 +24,7 @@ public class TaskStateManagerTests
     {
         var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         var store = new DistributedCacheTaskStateStore(cache);
-        return new TaskStateManager(store, new TaskControlTowerOptions());
+        return new TaskStateManager(store, new TaskTurnstileOptions());
     }
 
     // ── CanStartAsync ─────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ public class TaskStateManagerTests
         var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         var manager = new TaskStateManager(
             new DistributedCacheTaskStateStore(cache),
-            new TaskControlTowerOptions { DefaultMaxRuntime = TimeSpan.FromMilliseconds(50) });
+            new TaskTurnstileOptions { DefaultMaxRuntime = TimeSpan.FromMilliseconds(50) });
 
         await manager.StartAsync("job");
         Assert.True(await manager.IsRunningAsync("job"));
@@ -400,8 +400,8 @@ public class TaskStateManagerTests
         var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         var store = new DistributedCacheTaskStateStore(cache);
         return (
-            new TaskStateManager(store, new TaskControlTowerOptions()),
-            new TaskStateManager(store, new TaskControlTowerOptions())
+            new TaskStateManager(store, new TaskTurnstileOptions()),
+            new TaskStateManager(store, new TaskTurnstileOptions())
         );
     }
 

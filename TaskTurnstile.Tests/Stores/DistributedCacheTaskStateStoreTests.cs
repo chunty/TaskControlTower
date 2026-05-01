@@ -1,9 +1,9 @@
-using TaskControlTower.Stores;
+using TaskTurnstile.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace TaskControlTower.Tests.Stores;
+namespace TaskTurnstile.Tests.Stores;
 
 public class DistributedCacheTaskStateStoreTests
 {

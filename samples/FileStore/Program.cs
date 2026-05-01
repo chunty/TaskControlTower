@@ -1,16 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
-using TaskControlTower;
-using TaskControlTower.DependencyInjection;
+using TaskTurnstile;
+using TaskTurnstile.DependencyInjection;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-var lockDir = Path.Combine(Path.GetTempPath(), "task-control-tower-demo");
+var lockDir = Path.Combine(Path.GetTempPath(), "task-turnstile-demo");
 const string TaskName = "nightly-report";
 
 // ── Build the service provider ────────────────────────────────────────────────
 
 var sp = new ServiceCollection()
-    .AddTaskControlTower()
+    .AddTaskTurnstile()
     .UseTaskStateStore(_ => new FileTaskStateStore(lockDir))
     .Services
     .BuildServiceProvider();
@@ -20,7 +20,7 @@ var store   = sp.GetRequiredService<ITaskStateStore>();
 
 // ── Header ────────────────────────────────────────────────────────────────────
 
-Section("TaskControlTower — Persistence Demo");
+Section("TaskTurnstile — Persistence Demo");
 Info($"Lock directory : {lockDir}");
 Info($"Task name      : {TaskName}");
 Console.WriteLine();

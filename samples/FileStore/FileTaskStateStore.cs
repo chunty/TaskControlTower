@@ -1,4 +1,4 @@
-using TaskControlTower;
+using TaskTurnstile;
 using Microsoft.Extensions.DependencyInjection;
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 public sealed class FileTaskStateStore(string directory) : ITaskStateStore
 {
-    public FileTaskStateStore() : this(Path.Combine(Path.GetTempPath(), "task-control-tower")) { }
+    public FileTaskStateStore() : this(Path.Combine(Path.GetTempPath(), "task-turnstile")) { }
 
     private string LockFile(string taskName) =>
         Path.Combine(directory, $"{taskName}.lock");
@@ -86,10 +86,10 @@ public sealed class FileTaskStateStore(string directory) : ITaskStateStore
 // Registration — wire it up via UseTaskStateStore<T>()
 // ──────────────────────────────────────────────────────────────────────────────
 
-// services.AddTaskControlTower(o => o.CleanupOnStartup = true)
+// services.AddTaskTurnstile(o => o.CleanupOnStartup = true)
 //         .UseTaskStateStore<FileTaskStateStore>();
 //
 // Or with a factory if you need to pass the directory:
 //
-// services.AddTaskControlTower(o => o.CleanupOnStartup = true)
+// services.AddTaskTurnstile(o => o.CleanupOnStartup = true)
 //         .UseTaskStateStore(sp => new FileTaskStateStore("/var/run/my-app/locks"));

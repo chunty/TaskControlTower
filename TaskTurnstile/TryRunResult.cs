@@ -1,4 +1,4 @@
-namespace TaskControlTower;
+namespace TaskTurnstile;
 
 public record TryRunResult<T>(bool Started, T? Value)
 {

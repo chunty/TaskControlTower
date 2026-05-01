@@ -1,4 +1,4 @@
-using TaskControlTower.Stores;
+using TaskTurnstile.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,15 +6,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace TaskControlTower.DependencyInjection;
+namespace TaskTurnstile.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static TaskControlTowerBuilder AddTaskControlTower(
+    public static TaskTurnstileBuilder AddTaskTurnstile(
         this IServiceCollection services,
-        Action<TaskControlTowerOptions>? configure = null)
+        Action<TaskTurnstileOptions>? configure = null)
     {
-        var options = new TaskControlTowerOptions();
+        var options = new TaskTurnstileOptions();
         configure?.Invoke(options);
 
         services.AddSingleton(options);
@@ -31,6 +31,6 @@ public static class ServiceCollectionExtensions
         if (options.CleanupOnStartup)
             services.AddSingleton<IHostedService, CleanupOnStartupHostedService>();
 
-        return new TaskControlTowerBuilder(services);
+        return new TaskTurnstileBuilder(services);
     }
 }

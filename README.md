@@ -1,4 +1,4 @@
-# Task Control Tower
+# Task Turnstile
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
@@ -6,7 +6,7 @@ A thread-safe named task lifecycle manager for .NET. Prevents duplicate backgrou
 
 ## Why?
 
-Scheduled jobs (Coravel, Hangfire, Quartz) fire on a timer. If the previous run hasn't finished, you don't want a second one to start. `TaskControlTower` gives you a named gate:
+Scheduled jobs (Coravel, Hangfire, Quartz) fire on a timer. If the previous run hasn't finished, you don't want a second one to start. `TaskTurnstile` gives you a named gate:
 
 ```csharp
 if (!await _concurrencyManager.CanStartAsync("import-job"))
@@ -22,7 +22,7 @@ Unlike a simple lock, the state can survive app restarts (via Redis or SQL Serve
 ### In-memory (single instance, no persistence)
 
 ```csharp
-builder.Services.AddTaskControlTower();
+builder.Services.AddTaskTurnstile();
 ```
 
 The default store is a private in-memory cache — isolated from your app's own `IMemoryCache` and requiring zero configuration.
@@ -30,18 +30,18 @@ The default store is a private in-memory cache — isolated from your app's own 
 ### Redis
 
 ```csharp
-builder.Services.AddTaskControlTower()
+builder.Services.AddTaskTurnstile()
                 .AddRedisStore(o => o.Configuration = "localhost:6379");
 ```
 
-This creates a **dedicated** Redis connection for `TaskControlTower`, independent of any other Redis cache your app may be using. Configure it with any connection string — it can point at the same Redis instance as your app or a completely separate one.
+This creates a **dedicated** Redis connection for `TaskTurnstile`, independent of any other Redis cache your app may be using. Configure it with any connection string — it can point at the same Redis instance as your app or a completely separate one.
 
-If you'd prefer `TaskControlTower` to share your app's **existing** `IDistributedCache` instead, use `AddDistributedStore()` (see below).
+If you'd prefer `TaskTurnstile` to share your app's **existing** `IDistributedCache` instead, use `AddDistributedStore()` (see below).
 
 ### SQL Server
 
 ```csharp
-builder.Services.AddTaskControlTower()
+builder.Services.AddTaskTurnstile()
                 .AddSqlServerStore(o =>
                 {
                     o.ConnectionString = "Server=.;Database=MyApp;...";
@@ -57,10 +57,10 @@ builder.Services.AddTaskControlTower()
 
 ### Use the app's existing `IDistributedCache`
 
-If you've already registered a distributed cache (e.g. `AddStackExchangeRedisCache`) and want `TaskControlTower` to share it:
+If you've already registered a distributed cache (e.g. `AddStackExchangeRedisCache`) and want `TaskTurnstile` to share it:
 
 ```csharp
-builder.Services.AddTaskControlTower()
+builder.Services.AddTaskTurnstile()
                 .AddDistributedStore();
 ```
 
@@ -71,7 +71,7 @@ Task keys are prefixed with `KeyPrefix` (default `"cm:"`) to avoid collisions wi
 ## Options
 
 ```csharp
-builder.Services.AddTaskControlTower(o =>
+builder.Services.AddTaskTurnstile(o =>
 {
     // Maximum time a task can run before it's considered stale.
     // Prevents tasks from being stuck forever if TryStopAsync is never called (e.g. app crash).
@@ -217,11 +217,11 @@ Register it:
 
 ```csharp
 // Let DI create it:
-builder.Services.AddTaskControlTower()
+builder.Services.AddTaskTurnstile()
                 .UseTaskStateStore<MyCustomStore>();
 
 // Or use a factory:
-builder.Services.AddTaskControlTower()
+builder.Services.AddTaskTurnstile()
                 .UseTaskStateStore(sp => new MyCustomStore("/var/run/locks"));
 ```
 

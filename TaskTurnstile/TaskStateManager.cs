@@ -3,9 +3,9 @@ using AsyncKeyedLock;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace TaskControlTower;
+namespace TaskTurnstile;
 
-internal sealed class TaskStateManager(ITaskStateStore store, TaskControlTowerOptions options) : ITaskStateManager
+internal sealed class TaskStateManager(ITaskStateStore store, TaskTurnstileOptions options) : ITaskStateManager
 {
     private readonly AsyncKeyedLocker<string> _locker = new();
     private readonly IMemoryCache _localCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

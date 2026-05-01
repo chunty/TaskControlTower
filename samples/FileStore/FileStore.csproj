@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TaskControlTower\TaskControlTower.csproj" />
+    <ProjectReference Include="..\..\TaskTurnstile\TaskTurnstile.csproj" />
   </ItemGroup>
 
   <ItemGroup>

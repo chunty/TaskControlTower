@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>TaskControlTower</PackageId>
+    <PackageId>TaskTurnstile</PackageId>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="TaskControlTower.Tests" />
+    <InternalsVisibleTo Include="TaskTurnstile.Tests" />
   </ItemGroup>
 
   <ItemGroup>
