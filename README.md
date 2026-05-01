@@ -1,4 +1,4 @@
-# Concurrency Manager
+# Task Control Tower
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
