@@ -1,9 +1,9 @@
-using ConcurrencyManager.Stores;
+using TaskControlTower.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace ConcurrencyManager.Tests.Stores;
+namespace TaskControlTower.Tests.Stores;
 
 public class DistributedCacheTaskStateStoreTests
 {

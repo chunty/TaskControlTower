@@ -1,4 +1,4 @@
-namespace ConcurrencyManager;
+namespace TaskControlTower;
 
 public record TryRunResult<T>(bool Started, T? Value)
 {

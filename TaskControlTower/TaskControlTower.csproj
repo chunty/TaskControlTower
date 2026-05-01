@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>ConcurrencyManager</PackageId>
+    <PackageId>TaskControlTower</PackageId>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="ConcurrencyManager.Tests" />
+    <InternalsVisibleTo Include="TaskControlTower.Tests" />
   </ItemGroup>
 
   <ItemGroup>
