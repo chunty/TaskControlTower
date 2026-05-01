@@ -2,6 +2,8 @@
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
+> **Think of it like an air traffic control tower.** Every job that wants to run must request clearance first. The tower knows exactly what's in the air — only one flight can hold a given slot at a time, others are told to wait or come back later. When a flight lands, the slot is released and the next one can take off.
+
 ## Why?
 
 Scheduled jobs (Coravel, Hangfire, Quartz) fire on a timer. If the previous run hasn't finished, you don't want a second one to start. `TaskControlTower` gives you a named gate:
