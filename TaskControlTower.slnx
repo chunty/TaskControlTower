@@ -3,4 +3,5 @@
   <Project Path="TaskControlTower.SqlServer/TaskControlTower.SqlServer.csproj" />
   <Project Path="TaskControlTower.Tests/TaskControlTower.Tests.csproj" />
   <Project Path="TaskControlTower/TaskControlTower.csproj" />
+  <Project Path="samples/FileStore/FileStore.csproj" />
 </Solution>
