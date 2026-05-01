@@ -1,6 +1,6 @@
-namespace ConcurrencyManager;
+namespace TaskControlTower;
 
-public sealed class ConcurrencyManagerOptions
+public sealed class TaskControlTowerOptions
 {
     /// <summary>Default MaxRuntime applied when StartAsync is called without an explicit maxRuntime. Null means no expiry.</summary>
     public TimeSpan? DefaultMaxRuntime { get; set; }

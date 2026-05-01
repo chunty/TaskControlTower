@@ -1,4 +1,4 @@
-namespace ConcurrencyManager;
+namespace TaskControlTower;
 
 public interface ITaskStateStore
 {

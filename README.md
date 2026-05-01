@@ -4,7 +4,7 @@ A thread-safe named task lifecycle manager for .NET. Prevents duplicate backgrou
 
 ## Why?
 
-Scheduled jobs (Coravel, Hangfire, Quartz) fire on a timer. If the previous run hasn't finished, you don't want a second one to start. `ConcurrencyManager` gives you a named gate:
+Scheduled jobs (Coravel, Hangfire, Quartz) fire on a timer. If the previous run hasn't finished, you don't want a second one to start. `TaskControlTower` gives you a named gate:
 
 ```csharp
 if (!await _concurrencyManager.CanStartAsync("import-job"))
@@ -20,7 +20,7 @@ Unlike a simple lock, the state can survive app restarts (via Redis or SQL Serve
 ### In-memory (single instance, no persistence)
 
 ```csharp
-builder.Services.AddConcurrencyManager();
+builder.Services.AddTaskControlTower();
 ```
 
 The default store is a private in-memory cache — isolated from your app's own `IMemoryCache` and requiring zero configuration.
@@ -28,18 +28,18 @@ The default store is a private in-memory cache — isolated from your app's own 
 ### Redis
 
 ```csharp
-builder.Services.AddConcurrencyManager()
+builder.Services.AddTaskControlTower()
                 .AddRedisStore(o => o.Configuration = "localhost:6379");
 ```
 
-This creates a **dedicated** Redis connection for `ConcurrencyManager`, independent of any other Redis cache your app may be using. Configure it with any connection string — it can point at the same Redis instance as your app or a completely separate one.
+This creates a **dedicated** Redis connection for `TaskControlTower`, independent of any other Redis cache your app may be using. Configure it with any connection string — it can point at the same Redis instance as your app or a completely separate one.
 
-If you'd prefer `ConcurrencyManager` to share your app's **existing** `IDistributedCache` instead, use `AddDistributedStore()` (see below).
+If you'd prefer `TaskControlTower` to share your app's **existing** `IDistributedCache` instead, use `AddDistributedStore()` (see below).
 
 ### SQL Server
 
 ```csharp
-builder.Services.AddConcurrencyManager()
+builder.Services.AddTaskControlTower()
                 .AddSqlServerStore(o =>
                 {
                     o.ConnectionString = "Server=.;Database=MyApp;...";
@@ -55,10 +55,10 @@ builder.Services.AddConcurrencyManager()
 
 ### Use the app's existing `IDistributedCache`
 
-If you've already registered a distributed cache (e.g. `AddStackExchangeRedisCache`) and want `ConcurrencyManager` to share it:
+If you've already registered a distributed cache (e.g. `AddStackExchangeRedisCache`) and want `TaskControlTower` to share it:
 
 ```csharp
-builder.Services.AddConcurrencyManager()
+builder.Services.AddTaskControlTower()
                 .AddDistributedStore();
 ```
 
@@ -69,7 +69,7 @@ Task keys are prefixed with `KeyPrefix` (default `"cm:"`) to avoid collisions wi
 ## Options
 
 ```csharp
-builder.Services.AddConcurrencyManager(o =>
+builder.Services.AddTaskControlTower(o =>
 {
     // Maximum time a task can run before it's considered stale.
     // Prevents tasks from being stuck forever if TryStopAsync is never called (e.g. app crash).
@@ -89,16 +89,16 @@ builder.Services.AddConcurrencyManager(o =>
 
 ## API
 
-Inject `IConcurrencyManager` into your class:
+Inject `ITaskStateManager` into your class:
 
 ```csharp
-public class ImportJob(IConcurrencyManager concurrencyManager)
+public class ImportJob(ITaskStateManager manager)
 ```
 
 ### Check if a task can start
 
 ```csharp
-bool canStart = await concurrencyManager.CanStartAsync("import-job");
+bool canStart = await manager.CanStartAsync("import-job");
 ```
 
 Returns `true` if the task is not currently running (or its `maxRuntime` has expired).
@@ -107,7 +107,7 @@ Returns `true` if the task is not currently running (or its `maxRuntime` has exp
 
 ```csharp
 // Returns false immediately if already running; true after work completes.
-bool ran = await concurrencyManager.TryRunAsync("import-job", async ct =>
+bool ran = await manager.TryRunAsync("import-job", async ct =>
 {
     await DoImportAsync(ct);
 });
@@ -115,7 +115,7 @@ bool ran = await concurrencyManager.TryRunAsync("import-job", async ct =>
 
 ```csharp
 // With a return value:
-var result = await concurrencyManager.TryRunAsync("import-job", async ct =>
+var result = await manager.TryRunAsync("import-job", async ct =>
 {
     return await DoImportAsync(ct);
 });
@@ -128,7 +128,7 @@ if (result.Started)
 
 ```csharp
 // Waits until "import-job" is free, then starts and runs the work.
-await concurrencyManager.RunAsync("import-job", async ct =>
+await manager.RunAsync("import-job", async ct =>
 {
     await DoImportAsync(ct);
 });
@@ -137,7 +137,7 @@ await concurrencyManager.RunAsync("import-job", async ct =>
 ### Manual start/stop
 
 ```csharp
-if (!await concurrencyManager.StartAsync("import-job"))
+if (!await manager.StartAsync("import-job"))
     return; // already running
 
 try
@@ -146,7 +146,7 @@ try
 }
 finally
 {
-    await concurrencyManager.TryStopAsync("import-job");
+    await manager.TryStopAsync("import-job");
 }
 ```
 
@@ -155,7 +155,7 @@ finally
 All methods accept an optional `maxRuntime` to override the global default:
 
 ```csharp
-await concurrencyManager.TryRunAsync("long-job", DoWorkAsync, maxRuntime: TimeSpan.FromHours(4));
+await manager.TryRunAsync("long-job", DoWorkAsync, maxRuntime: TimeSpan.FromHours(4));
 ```
 
 ---
@@ -165,11 +165,11 @@ await concurrencyManager.TryRunAsync("long-job", DoWorkAsync, maxRuntime: TimeSp
 ### Coravel invocable (skip if already running)
 
 ```csharp
-public class ImportInvocable(IConcurrencyManager concurrencyManager) : IInvocable
+public class ImportInvocable(ITaskStateManager manager) : IInvocable
 {
     public async Task Invoke()
     {
-        await concurrencyManager.TryRunAsync("import", async ct =>
+        await manager.TryRunAsync("import", async ct =>
         {
             await DoImportAsync(ct);
         });
@@ -184,7 +184,7 @@ protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 {
     while (!stoppingToken.IsCancellationRequested)
     {
-        await concurrencyManager.RunAsync("sync", async ct =>
+        await manager.RunAsync("sync", async ct =>
         {
             await DoSyncAsync(ct);
         }, cancellationToken: stoppingToken);
@@ -215,11 +215,11 @@ Register it:
 
 ```csharp
 // Let DI create it:
-builder.Services.AddConcurrencyManager()
+builder.Services.AddTaskControlTower()
                 .UseTaskStateStore<MyCustomStore>();
 
 // Or use a factory:
-builder.Services.AddConcurrencyManager()
+builder.Services.AddTaskControlTower()
                 .UseTaskStateStore(sp => new MyCustomStore("/var/run/locks"));
 ```
 

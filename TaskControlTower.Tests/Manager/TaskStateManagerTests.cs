@@ -1,5 +1,5 @@
-using ConcurrencyManager.DependencyInjection;
-using ConcurrencyManager.Stores;
+using TaskControlTower.DependencyInjection;
+using TaskControlTower.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,24 +7,24 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace ConcurrencyManager.Tests.Manager;
+namespace TaskControlTower.Tests.Manager;
 
-/// <summary>Unit tests for ConcurrencyManager using a mock ITaskStateStore.</summary>
-public class ConcurrencyManagerTests
+/// <summary>Unit tests for TaskStateManager using a mock ITaskStateStore.</summary>
+public class TaskStateManagerTests
 {
-    private static (ConcurrencyManager manager, ITaskStateStore store) BuildWithMockStore(
-        ConcurrencyManagerOptions? options = null)
+    private static (TaskStateManager manager, ITaskStateStore store) BuildWithMockStore(
+        TaskControlTowerOptions? options = null)
     {
         var store = Substitute.For<ITaskStateStore>();
-        var manager = new ConcurrencyManager(store, options ?? new ConcurrencyManagerOptions());
+        var manager = new TaskStateManager(store, options ?? new TaskControlTowerOptions());
         return (manager, store);
     }
 
-    private static ConcurrencyManager BuildWithRealStore()
+    private static TaskStateManager BuildWithRealStore()
     {
         var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         var store = new DistributedCacheTaskStateStore(cache);
-        return new ConcurrencyManager(store, new ConcurrencyManagerOptions());
+        return new TaskStateManager(store, new TaskControlTowerOptions());
     }
 
     // ── CanStartAsync ─────────────────────────────────────────────────────────
@@ -99,9 +99,9 @@ public class ConcurrencyManagerTests
     public async Task StartAsync_UsesDefaultMaxRuntime_WhenNotProvided()
     {
         var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
-        var manager = new ConcurrencyManager(
+        var manager = new TaskStateManager(
             new DistributedCacheTaskStateStore(cache),
-            new ConcurrencyManagerOptions { DefaultMaxRuntime = TimeSpan.FromMilliseconds(50) });
+            new TaskControlTowerOptions { DefaultMaxRuntime = TimeSpan.FromMilliseconds(50) });
 
         await manager.StartAsync("job");
         Assert.True(await manager.IsRunningAsync("job"));

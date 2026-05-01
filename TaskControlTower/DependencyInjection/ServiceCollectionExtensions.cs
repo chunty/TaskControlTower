@@ -1,4 +1,4 @@
-using ConcurrencyManager.Stores;
+using TaskControlTower.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,15 +6,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace ConcurrencyManager.DependencyInjection;
+namespace TaskControlTower.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static ConcurrencyManagerBuilder AddConcurrencyManager(
+    public static TaskControlTowerBuilder AddTaskControlTower(
         this IServiceCollection services,
-        Action<ConcurrencyManagerOptions>? configure = null)
+        Action<TaskControlTowerOptions>? configure = null)
     {
-        var options = new ConcurrencyManagerOptions();
+        var options = new TaskControlTowerOptions();
         configure?.Invoke(options);
 
         services.AddSingleton(options);
@@ -26,11 +26,11 @@ public static class ServiceCollectionExtensions
                 new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions())),
                 options.KeyPrefix));
 
-        services.AddSingleton<IConcurrencyManager, ConcurrencyManager>();
+        services.AddSingleton<ITaskStateManager, TaskStateManager>();
 
         if (options.CleanupOnStartup)
             services.AddSingleton<IHostedService, CleanupOnStartupHostedService>();
 
-        return new ConcurrencyManagerBuilder(services);
+        return new TaskControlTowerBuilder(services);
     }
 }
