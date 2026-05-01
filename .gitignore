@@ -10,5 +10,3 @@
 /*/obj/project.assets.json
 /*/obj/project.nuget.cache
 /*/obj/*
-/ConcurrencyManager.Redis/bin/*
-/ConcurrencyManager.Redis/obj/Debug/net10.0/ref/ConcurrencyManager.Redis.dll

@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>ConcurrencyManager.Redis</PackageId>
-    <Version>1.0.0</Version>
     <Authors>Chris Hunt</Authors>
     <Company>TappetyClick</Company>
     <Description>
@@ -15,6 +14,10 @@
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ConcurrencyManager\ConcurrencyManager.csproj" />

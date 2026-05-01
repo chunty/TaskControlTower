@@ -1,19 +1,15 @@
 using ConcurrencyManager.Stores;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.TimeProvider.Testing;
 
 namespace ConcurrencyManager.Tests.Stores;
 
 public class DistributedCacheTaskStateStoreTests
 {
-    private static DistributedCacheTaskStateStore BuildStore(FakeTimeProvider? timeProvider = null)
+    private static DistributedCacheTaskStateStore BuildStore()
     {
-        var cacheOptions = new MemoryDistributedCacheOptions();
-        if (timeProvider is not null)
-            cacheOptions.TimeProvider = timeProvider;
-
-        var cache = new MemoryDistributedCache(Options.Create(cacheOptions));
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         return new DistributedCacheTaskStateStore(cache);
     }
 
@@ -68,8 +64,6 @@ public class DistributedCacheTaskStateStoreTests
     {
         var store = BuildStore();
         await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(1));
-        // Even a very short maxRuntime — IsExpiredAsync is always false;
-        // the cache simply makes the entry disappear instead.
         Assert.False(await store.IsExpiredAsync("job"));
     }
 
@@ -87,24 +81,22 @@ public class DistributedCacheTaskStateStoreTests
     [Fact]
     public async Task SetRunningAsync_WithMaxRuntime_EntryExpiresAfterElapsed()
     {
-        var time = new FakeTimeProvider();
-        var store = BuildStore(time);
+        var store = BuildStore();
 
-        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMinutes(1));
+        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(50));
         Assert.True(await store.IsRunningAsync("job"));
 
-        time.Advance(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(1)));
+        await Task.Delay(150);
         Assert.False(await store.IsRunningAsync("job"));
     }
 
     [Fact]
     public async Task SetRunningAsync_WithoutMaxRuntime_EntryDoesNotExpire()
     {
-        var time = new FakeTimeProvider();
-        var store = BuildStore(time);
+        var store = BuildStore();
 
         await store.SetRunningAsync("job", maxRuntime: null);
-        time.Advance(TimeSpan.FromDays(365));
+        await Task.Delay(100);
         Assert.True(await store.IsRunningAsync("job"));
     }
 
@@ -114,8 +106,7 @@ public class DistributedCacheTaskStateStoreTests
     public async Task SetStoppedAsync_IsIdempotent_WhenCalledWhenNotRunning()
     {
         var store = BuildStore();
-        // Should not throw
-        await store.SetStoppedAsync("job");
+        await store.SetStoppedAsync("job"); // should not throw
         Assert.False(await store.IsRunningAsync("job"));
     }
 

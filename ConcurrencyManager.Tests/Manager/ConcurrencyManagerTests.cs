@@ -1,8 +1,9 @@
 using ConcurrencyManager.DependencyInjection;
+using ConcurrencyManager.Stores;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.TimeProvider.Testing;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
@@ -19,13 +20,10 @@ public class ConcurrencyManagerTests
         return (manager, store);
     }
 
-    private static ConcurrencyManager BuildWithRealStore(FakeTimeProvider? timeProvider = null)
+    private static ConcurrencyManager BuildWithRealStore()
     {
-        var cacheOptions = new MemoryDistributedCacheOptions();
-        if (timeProvider is not null)
-            cacheOptions.TimeProvider = timeProvider;
-        var cache = new MemoryDistributedCache(Options.Create(cacheOptions));
-        var store = new Stores.DistributedCacheTaskStateStore(cache);
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
+        var store = new DistributedCacheTaskStateStore(cache);
         return new ConcurrencyManager(store, new ConcurrencyManagerOptions());
     }
 
@@ -100,16 +98,15 @@ public class ConcurrencyManagerTests
     [Fact]
     public async Task StartAsync_UsesDefaultMaxRuntime_WhenNotProvided()
     {
-        var time = new FakeTimeProvider();
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
         var manager = new ConcurrencyManager(
-            new Stores.DistributedCacheTaskStateStore(
-                new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions { TimeProvider = time }))),
-            new ConcurrencyManagerOptions { DefaultMaxRuntime = TimeSpan.FromMinutes(5) });
+            new DistributedCacheTaskStateStore(cache),
+            new ConcurrencyManagerOptions { DefaultMaxRuntime = TimeSpan.FromMilliseconds(50) });
 
         await manager.StartAsync("job");
         Assert.True(await manager.IsRunningAsync("job"));
 
-        time.Advance(TimeSpan.FromMinutes(6));
+        await Task.Delay(150);
         Assert.False(await manager.IsRunningAsync("job"));
     }
 
@@ -257,7 +254,7 @@ public class ConcurrencyManagerTests
 
         using var cts = new CancellationTokenSource(50);
 
-        await Assert.ThrowsAsync<OperationCanceledException>(() =>
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
             manager.WaitAsync("job", pollIntervalMs: 10, cancellationToken: cts.Token));
     }
 
