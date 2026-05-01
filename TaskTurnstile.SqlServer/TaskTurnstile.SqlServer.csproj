@@ -10,10 +10,11 @@
     <Description>
       SQL Server backing store for TaskTurnstile via IDistributedCache.
       Supports dedicated SQL Server instances independent of the app's own cache.
-      Requires the cache table to be pre-created with the dotnet sql-cache CLI tool.
+      The cache table is created automatically on first startup.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, SQL Server, Distributed Cache</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/chunty/TaskControlTower</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

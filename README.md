@@ -1,4 +1,6 @@
 # Task Turnstile
+[![NuGet](https://img.shields.io/nuget/dt/taskter.svg)](https://www.nuget.org/packages/clevercache) 
+[![NuGet](https://img.shields.io/nuget/vpre/clevercache.svg)](https://www.nuget.org/packages/clevercache)
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
@@ -50,10 +52,7 @@ builder.Services.AddTaskTurnstile()
                 });
 ```
 
-> **Note:** The cache table must be created before first use:
-> ```
-> dotnet sql-cache create "Server=.;Database=MyApp;..." dbo ActiveTasks
-> ```
+> The table is created automatically on first startup — no manual setup required.
 
 ### Use the app's existing `IDistributedCache`
 
@@ -65,6 +64,10 @@ builder.Services.AddTaskTurnstile()
 ```
 
 Task keys are prefixed with `KeyPrefix` (default `"cm:"`) to avoid collisions with your own cache entries. Override it in options if needed.
+
+---
+
+> **Performance:** Regardless of which backing store you choose, all state checks are short-circuited by a local in-process memory cache. Once this instance marks a task as running, subsequent checks skip the backing store entirely until the task stops or its `maxRuntime` expires.
 
 ---
 
