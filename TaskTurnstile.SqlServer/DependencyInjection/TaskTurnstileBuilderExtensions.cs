@@ -8,7 +8,7 @@ public static class TaskTurnstileBuilderExtensions
     /// <summary>
     /// Uses a dedicated SQL Server distributed cache as the backing store, isolated from any
     /// other distributed cache the app may have registered.
-    /// The cache table must exist — create it with: dotnet sql-cache create "connection" schema table
+    /// The cache table is created automatically on first startup if it does not already exist.
     /// </summary>
     /// <example>
     /// services.AddTaskTurnstile()

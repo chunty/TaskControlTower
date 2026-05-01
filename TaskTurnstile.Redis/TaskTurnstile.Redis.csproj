@@ -13,6 +13,7 @@
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/chunty/TaskControlTower</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
