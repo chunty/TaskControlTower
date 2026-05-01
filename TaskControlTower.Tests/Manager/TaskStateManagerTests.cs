@@ -339,4 +339,106 @@ public class TaskStateManagerTests
 
         Assert.Equal(2, callCount);
     }
+
+    // ── TryRunAsync<T> exception handling ────────────────────────────────────
+
+    [Fact]
+    public async Task TryRunAsync_Generic_StopsTask_EvenWhenWorkThrows()
+    {
+        var manager = BuildWithRealStore();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            manager.TryRunAsync<int>("job", _ => throw new InvalidOperationException("boom")));
+
+        Assert.False(await manager.IsRunningAsync("job"));
+    }
+
+    // ── StartAsync with explicit maxRuntime ───────────────────────────────────
+
+    [Fact]
+    public async Task StartAsync_ExplicitMaxRuntime_ExpiresAfterElapsed()
+    {
+        var manager = BuildWithRealStore();
+
+        await manager.StartAsync("job", maxRuntime: TimeSpan.FromMilliseconds(50));
+        Assert.True(await manager.IsRunningAsync("job"));
+
+        await Task.Delay(150);
+        Assert.False(await manager.IsRunningAsync("job"));
+    }
+
+    // ── WaitAsync acquires the task ───────────────────────────────────────────
+
+    [Fact]
+    public async Task WaitAsync_MarksTaskAsRunning_AfterReturning()
+    {
+        var manager = BuildWithRealStore();
+
+        await manager.WaitAsync("job", pollIntervalMs: 10, maxWaitMs: 500);
+
+        Assert.True(await manager.IsRunningAsync("job"));
+    }
+
+    // ── RunAsync cancellation while waiting ───────────────────────────────────
+
+    [Fact]
+    public async Task RunAsync_ThrowsOperationCanceled_WhenCancelledWhileWaiting()
+    {
+        var manager = BuildWithRealStore();
+        await manager.StartAsync("job");
+
+        using var cts = new CancellationTokenSource(50);
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            manager.RunAsync("job", _ => Task.CompletedTask, cancellationToken: cts.Token));
+    }
+
+    // ── Multi-manager coordination ────────────────────────────────────────────
+
+    private static (TaskStateManager managerA, TaskStateManager managerB) BuildTwoManagersWithSharedStore()
+    {
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
+        var store = new DistributedCacheTaskStateStore(cache);
+        return (
+            new TaskStateManager(store, new TaskControlTowerOptions()),
+            new TaskStateManager(store, new TaskControlTowerOptions())
+        );
+    }
+
+    [Fact]
+    public async Task TwoManagers_SharedStore_OnlyOneCanStart()
+    {
+        var (managerA, managerB) = BuildTwoManagersWithSharedStore();
+
+        var startedA = await managerA.StartAsync("job");
+        var startedB = await managerB.StartAsync("job");
+
+        Assert.True(startedA);
+        Assert.False(startedB);
+    }
+
+    [Fact]
+    public async Task TwoManagers_SharedStore_ManagerBCanStartAfterManagerAStops()
+    {
+        var (managerA, managerB) = BuildTwoManagersWithSharedStore();
+
+        await managerA.StartAsync("job");
+        await managerA.TryStopAsync("job");
+
+        Assert.True(await managerB.StartAsync("job"));
+    }
+
+    [Fact]
+    public async Task TwoManagers_SharedStore_TryRunAsync_OnlyOneExecutesWork()
+    {
+        var (managerA, managerB) = BuildTwoManagersWithSharedStore();
+        var callCount = 0;
+
+        var t1 = managerA.TryRunAsync("job", async _ => { Interlocked.Increment(ref callCount); await Task.Delay(30); });
+        var t2 = managerB.TryRunAsync("job", async _ => { Interlocked.Increment(ref callCount); await Task.Delay(30); });
+
+        await Task.WhenAll(t1, t2);
+
+        Assert.Equal(1, callCount);
+    }
 }

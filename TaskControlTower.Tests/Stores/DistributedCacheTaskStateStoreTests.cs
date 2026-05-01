@@ -120,4 +120,31 @@ public class DistributedCacheTaskStateStoreTests
         await store.CleanupAsync(); // should not throw or remove non-expired entries
         Assert.True(await store.IsRunningAsync("job"));
     }
+
+    // ── KeyPrefix isolation ───────────────────────────────────────────────────
+
+    [Fact]
+    public async Task KeyPrefix_DifferentPrefixes_DoNotCollide()
+    {
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
+        var storeA = new DistributedCacheTaskStateStore(cache, "a:");
+        var storeB = new DistributedCacheTaskStateStore(cache, "b:");
+
+        await storeA.SetRunningAsync("job");
+
+        Assert.True(await storeA.IsRunningAsync("job"));
+        Assert.False(await storeB.IsRunningAsync("job"));
+    }
+
+    [Fact]
+    public async Task KeyPrefix_SamePrefix_CoordinatesAcrossInstances()
+    {
+        var cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
+        var storeA = new DistributedCacheTaskStateStore(cache, "shared:");
+        var storeB = new DistributedCacheTaskStateStore(cache, "shared:");
+
+        await storeA.SetRunningAsync("job");
+
+        Assert.True(await storeB.IsRunningAsync("job"));
+    }
 }
