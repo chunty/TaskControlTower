@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>ConcurrencyManager.Redis</PackageId>
+    <Authors>Chris Hunt</Authors>
+    <Company>TappetyClick</Company>
+    <Description>
+      Redis backing store for ConcurrencyManager via StackExchange.Redis and IDistributedCache.
+      Supports dedicated Redis instances independent of the app's own cache.
+    </Description>
+    <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConcurrencyManager\ConcurrencyManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.7" />
+  </ItemGroup>
+
+</Project>

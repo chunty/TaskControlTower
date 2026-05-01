@@ -4,6 +4,35 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>ConcurrencyManager</PackageId>
+    <Authors>Chris Hunt</Authors>
+    <Company>TappetyClick</Company>
+    <Description>
+      A thread-safe named task lifecycle manager. Prevents duplicate background job execution
+      with optional distributed persistence via IDistributedCache (in-memory, Redis, SQL Server).
+    </Description>
+    <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ConcurrencyManager.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncKeyedLock" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
+  </ItemGroup>
 
 </Project>
