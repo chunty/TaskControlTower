@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <PackageId>TaskTurnstile</PackageId>
     <Description>
       A thread-safe named task lifecycle manager. Prevents duplicate background job execution
@@ -11,6 +8,8 @@
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
     <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
+    <!-- Prevent this project from globbing files in nested sub-projects -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);TaskTurnstile.Redis\**;TaskTurnstile.SqlServer\**;TaskTurnstile.Tests\**;samples\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

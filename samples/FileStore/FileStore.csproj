@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TaskTurnstile\TaskTurnstile.csproj" />
+    <ProjectReference Include="..\..\TaskTurnstile.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <PackageId>TaskTurnstile.Redis</PackageId>
     <Description>
       Redis backing store for TaskTurnstile via StackExchange.Redis and IDistributedCache.
@@ -22,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskTurnstile\TaskTurnstile.csproj" />
+    <ProjectReference Include="..\TaskTurnstile.csproj" />
   </ItemGroup>
 
   <ItemGroup>
