@@ -9,4 +9,5 @@
 
 */bin/*
 */obj/*
-/samples/FileStore/bin/Debug/net10.0/AsyncKeyedLock.dll
+/samples/FileStore/bin/*
+/samples/FileStore/obj/*
