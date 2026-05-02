@@ -1,11 +1,23 @@
 <Project>
 
   <PropertyGroup>
-    <!-- Select the appropriate Microsoft.Extensions version for the target framework -->
-    <MicrosoftExtensionsVersion Condition="'$(TargetFramework)' == 'net9.0'">9.0.15</MicrosoftExtensionsVersion>
-    <MicrosoftExtensionsVersion Condition="'$(TargetFramework)' == 'net10.0'">10.0.7</MicrosoftExtensionsVersion>
-    <!-- Accept lightweight tags (GitHub releases create lightweight tags by default) -->
     <MinVerTagType>All</MinVerTagType>
+    <!-- Version selection for multi-targeted Microsoft.Extensions packages -->
+    <MicrosoftExtensionsVersion Condition="'$(TargetFramework)' == 'net9.0'">9.0.15</MicrosoftExtensionsVersion>
+    <!-- Default to net10.0 version when TFM is net10.0 or not yet set (single-TFM projects) -->
+    <MicrosoftExtensionsVersion Condition="'$(MicrosoftExtensionsVersion)' == ''">10.0.7</MicrosoftExtensionsVersion>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackable)' != 'false'">
+    <Authors>Chris Hunt</Authors>
+    <Company>TappetyClick</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' != 'false'">
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
