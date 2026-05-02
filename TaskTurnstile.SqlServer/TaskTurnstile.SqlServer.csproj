@@ -11,7 +11,12 @@
       The cache table is created automatically on first startup.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, SQL Server, Distributed Cache</PackageTags>
+    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NugetREADME.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />

@@ -10,7 +10,12 @@
       Supports dedicated Redis instances independent of the app's own cache.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
+    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NugetREADME.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />
