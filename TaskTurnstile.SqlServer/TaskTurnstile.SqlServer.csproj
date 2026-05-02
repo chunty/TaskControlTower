@@ -5,22 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>TaskTurnstile.SqlServer</PackageId>
-    <Authors>Chris Hunt</Authors>
-    <Company>TappetyClick</Company>
     <Description>
       SQL Server backing store for TaskTurnstile via IDistributedCache.
       Supports dedicated SQL Server instances independent of the app's own cache.
       The cache table is created automatically on first startup.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, SQL Server, Distributed Cache</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
-    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />

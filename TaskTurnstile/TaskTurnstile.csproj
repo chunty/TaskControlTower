@@ -5,20 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>TaskTurnstile</PackageId>
-    <Authors>Chris Hunt</Authors>
-    <Company>TappetyClick</Company>
     <Description>
       A thread-safe named task lifecycle manager. Prevents duplicate background job execution
       with optional distributed persistence via IDistributedCache (in-memory, Redis, SQL Server).
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
     <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="NugetREADME.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

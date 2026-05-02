@@ -5,21 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>TaskTurnstile.Redis</PackageId>
-    <Authors>Chris Hunt</Authors>
-    <Company>TappetyClick</Company>
     <Description>
       Redis backing store for TaskTurnstile via StackExchange.Redis and IDistributedCache.
       Supports dedicated Redis instances independent of the app's own cache.
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
-    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />
