@@ -13,8 +13,13 @@
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/chunty/TaskControlTower</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />

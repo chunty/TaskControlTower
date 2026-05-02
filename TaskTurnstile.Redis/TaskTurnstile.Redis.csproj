@@ -13,8 +13,13 @@
     </Description>
     <PackageTags>Concurrency, Background Tasks, Named Lock, Redis, Distributed Cache</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/chunty/TaskControlTower</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
@@ -25,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"Version="10.0.7" />
   </ItemGroup>
 
 </Project>

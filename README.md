@@ -1,6 +1,6 @@
 # Task Turnstile
-[![NuGet](https://img.shields.io/nuget/dt/taskter.svg)](https://www.nuget.org/packages/clevercache) 
-[![NuGet](https://img.shields.io/nuget/vpre/clevercache.svg)](https://www.nuget.org/packages/clevercache)
+[![NuGet](https://img.shields.io/nuget/v/TaskTurnstile.svg)](https://www.nuget.org/packages/TaskTurnstile)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/TaskTurnstile.svg)](https://www.nuget.org/packages/TaskTurnstile)
 
 A thread-safe named task lifecycle manager for .NET. Prevents duplicate background job execution across threads and — optionally — across multiple application instances via a distributed backing store.
 
