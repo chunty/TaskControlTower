@@ -14,7 +14,7 @@
     <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="MinVer" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncKeyedLock" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
+    <PackageReference Include="AsyncKeyedLock" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,12 @@
-﻿∩╗┐################################################################################
+﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-.vs
-/*/bin
-/*/obj
 
-/samples/*/bin
-/samples/*/obj
+.vs
+/*/bin/*
+/*/obj/*
+
+*/bin/*
+*/obj/*
+/samples/FileStore/bin/Debug/net10.0/AsyncKeyedLock.dll
