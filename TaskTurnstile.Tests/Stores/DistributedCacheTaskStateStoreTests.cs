@@ -1,4 +1,4 @@
-using TaskTurnstile.Stores;
+﻿using TaskTurnstile.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -19,42 +19,42 @@ public class DistributedCacheTaskStateStoreTests
     public async Task IsRunningAsync_ReturnsFalse_WhenNotStarted()
     {
         var store = BuildStore();
-        Assert.False(await store.IsRunningAsync("job"));
+        Assert.False(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IsRunningAsync_ReturnsTrue_AfterSetRunning()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job");
-        Assert.True(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IsRunningAsync_ReturnsFalse_AfterSetStopped()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job");
-        await store.SetStoppedAsync("job");
-        Assert.False(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
+        await store.SetStoppedAsync("job", TestContext.Current.CancellationToken);
+        Assert.False(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IsRunningAsync_IsCaseSensitive()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job");
-        Assert.False(await store.IsRunningAsync("Job"));
-        Assert.False(await store.IsRunningAsync("JOB"));
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.False(await store.IsRunningAsync("Job", TestContext.Current.CancellationToken));
+        Assert.False(await store.IsRunningAsync("JOB", TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IsRunningAsync_IsolatedByName()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job-a");
-        Assert.True(await store.IsRunningAsync("job-a"));
-        Assert.False(await store.IsRunningAsync("job-b"));
+        await store.SetRunningAsync("job-a", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(await store.IsRunningAsync("job-a", TestContext.Current.CancellationToken));
+        Assert.False(await store.IsRunningAsync("job-b", TestContext.Current.CancellationToken));
     }
 
     // ── IsExpiredAsync ────────────────────────────────────────────────────────
@@ -63,8 +63,8 @@ public class DistributedCacheTaskStateStoreTests
     public async Task IsExpiredAsync_AlwaysReturnsFalse_BecauseCacheAutoEvicts()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(1));
-        Assert.False(await store.IsExpiredAsync("job"));
+        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(1), cancellationToken: TestContext.Current.CancellationToken);
+        Assert.False(await store.IsExpiredAsync("job", TestContext.Current.CancellationToken));
     }
 
     // ── SetRunningAsync ───────────────────────────────────────────────────────
@@ -73,9 +73,9 @@ public class DistributedCacheTaskStateStoreTests
     public async Task SetRunningAsync_Upserts_CallingTwiceUpdatesEntry()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job");
-        await store.SetRunningAsync("job"); // should not throw
-        Assert.True(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken); // should not throw
+        Assert.True(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -83,11 +83,11 @@ public class DistributedCacheTaskStateStoreTests
     {
         var store = BuildStore();
 
-        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(50));
-        Assert.True(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", maxRuntime: TimeSpan.FromMilliseconds(50), cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
 
-        await Task.Delay(150);
-        Assert.False(await store.IsRunningAsync("job"));
+        await Task.Delay(150, TestContext.Current.CancellationToken);
+        Assert.False(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -95,9 +95,9 @@ public class DistributedCacheTaskStateStoreTests
     {
         var store = BuildStore();
 
-        await store.SetRunningAsync("job", maxRuntime: null);
-        await Task.Delay(100);
-        Assert.True(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", maxRuntime: null, cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(100, TestContext.Current.CancellationToken);
+        Assert.True(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     // ── SetStoppedAsync ───────────────────────────────────────────────────────
@@ -106,8 +106,8 @@ public class DistributedCacheTaskStateStoreTests
     public async Task SetStoppedAsync_IsIdempotent_WhenCalledWhenNotRunning()
     {
         var store = BuildStore();
-        await store.SetStoppedAsync("job"); // should not throw
-        Assert.False(await store.IsRunningAsync("job"));
+        await store.SetStoppedAsync("job", TestContext.Current.CancellationToken); // should not throw
+        Assert.False(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     // ── CleanupAsync ──────────────────────────────────────────────────────────
@@ -116,9 +116,9 @@ public class DistributedCacheTaskStateStoreTests
     public async Task CleanupAsync_IsNoOp()
     {
         var store = BuildStore();
-        await store.SetRunningAsync("job");
-        await store.CleanupAsync(); // should not throw or remove non-expired entries
-        Assert.True(await store.IsRunningAsync("job"));
+        await store.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
+        await store.CleanupAsync(TestContext.Current.CancellationToken); // should not throw or remove non-expired entries
+        Assert.True(await store.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     // ── KeyPrefix isolation ───────────────────────────────────────────────────
@@ -130,10 +130,10 @@ public class DistributedCacheTaskStateStoreTests
         var storeA = new DistributedCacheTaskStateStore(cache, "a:");
         var storeB = new DistributedCacheTaskStateStore(cache, "b:");
 
-        await storeA.SetRunningAsync("job");
+        await storeA.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(await storeA.IsRunningAsync("job"));
-        Assert.False(await storeB.IsRunningAsync("job"));
+        Assert.True(await storeA.IsRunningAsync("job", TestContext.Current.CancellationToken));
+        Assert.False(await storeB.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -143,8 +143,8 @@ public class DistributedCacheTaskStateStoreTests
         var storeA = new DistributedCacheTaskStateStore(cache, "shared:");
         var storeB = new DistributedCacheTaskStateStore(cache, "shared:");
 
-        await storeA.SetRunningAsync("job");
+        await storeA.SetRunningAsync("job", cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(await storeB.IsRunningAsync("job"));
+        Assert.True(await storeB.IsRunningAsync("job", TestContext.Current.CancellationToken));
     }
 }

@@ -11,6 +11,7 @@
 		<PackageProjectUrl>https://github.com/chunty/TaskTurnstile</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/chunty/TaskTurnstile</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 </Project>

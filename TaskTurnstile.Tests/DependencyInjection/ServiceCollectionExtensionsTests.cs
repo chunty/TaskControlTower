@@ -1,4 +1,4 @@
-using TaskTurnstile.DependencyInjection;
+﻿using TaskTurnstile.DependencyInjection;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,7 +52,7 @@ public class ServiceCollectionExtensionsTests
         var store = Substitute.For<ITaskStateStore>();
         var svc = new CleanupOnStartupHostedService(store);
 
-        await svc.StartAsync(CancellationToken.None);
+        await svc.StartAsync(TestContext.Current.CancellationToken);
 
         await store.Received(1).CleanupAsync(Arg.Any<CancellationToken>());
     }
@@ -72,7 +72,7 @@ public class ServiceCollectionExtensionsTests
             .Services.BuildServiceProvider();
 
         var store = sp.GetRequiredService<ITaskStateStore>();
-        await store.IsRunningAsync("job");
+        await store.IsRunningAsync("job", TestContext.Current.CancellationToken);
 
         await appCache.Received(1).GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }

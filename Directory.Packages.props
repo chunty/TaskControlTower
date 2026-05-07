@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
   <!-- Packages that don't vary by target framework -->
@@ -13,6 +14,10 @@
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <!-- Transitive pins: vulnerabilities introduced by Microsoft.Extensions.Caching.SqlServer 8.x -->
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.18.0" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
+    <PackageVersion Include="System.Drawing.Common" Version="8.0.26" />
   </ItemGroup>
 
   <!-- .NET 8 specific package versions -->
@@ -34,7 +39,7 @@
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.15" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.15" />
     <PackageVersion Include="Microsoft.Extensions.Caching.SqlServer" Version="9.0.15" />
-    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.10.0" />
   </ItemGroup>
 
   <!-- .NET 10 specific package versions -->
