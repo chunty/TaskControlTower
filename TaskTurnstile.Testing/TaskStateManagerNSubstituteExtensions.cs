@@ -1,7 +1,7 @@
 using NSubstitute;
 using NSubstitute.Core;
 
-namespace TaskTurnstile.Testing;
+namespace TaskTurnstile.Testing.NSubstitute;
 
 /// <summary>
 /// NSubstitute setup extensions for <see cref="ITaskStateManager"/> that eliminate boilerplate
@@ -129,7 +129,7 @@ public static class TaskStateManagerNSubstituteExtensions
     }
 
     /// <summary>
-    /// Sets up <see cref="ITaskStateManager.RunAsync"/> to invoke the work delegate.
+    /// Sets up <see cref="ITaskStateManager.RunAsync(object, Func{CancellationToken, Task}, TimeSpan?, CancellationToken)"/> to invoke the work delegate.
     /// </summary>
     /// <param name="manager">The NSubstitute substitute to configure.</param>
     /// <param name="taskKey">

@@ -13,7 +13,7 @@ The methods that take a `Func<CancellationToken, Task>` delegate (`TryRunAsync`,
 ### Moq / AutoMocker
 
 ```csharp
-using TaskTurnstile.Testing;
+using TaskTurnstile.Testing.Moq;
 
 // TryRunAsync — runs work and returns true
 Mocker.GetMock<ITaskStateManager>().SetupTryRunAsync(returns: true);
@@ -34,7 +34,7 @@ Mocker.GetMock<ITaskStateManager>().SetupTryRunAsyncToSkip<int>();
 ### NSubstitute
 
 ```csharp
-using TaskTurnstile.Testing;
+using TaskTurnstile.Testing.NSubstitute;
 
 var manager = Substitute.For<ITaskStateManager>();
 

@@ -10,7 +10,7 @@ Mocker.GetMock<ITaskStateManager>()
         It.IsAny<Func<CancellationToken, Task>>(),
         It.IsAny<TimeSpan?>(),
         It.IsAny<CancellationToken>()))
-    .Returns<string, Func<CancellationToken, Task>, TimeSpan?, CancellationToken>(
+    .Returns<object, Func<CancellationToken, Task>, TimeSpan?, CancellationToken>(
         async (_, work, _, ct) => { await work(ct); return true; });
 
 // After

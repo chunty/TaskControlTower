@@ -1,5 +1,5 @@
 using NSubstitute;
-using TaskTurnstile.Testing;
+using TaskTurnstile.Testing.NSubstitute;
 
 namespace TaskTurnstile.Tests.Testing;
 
@@ -54,7 +54,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     }
 
     [Fact]
-    public async Task SetupTryRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
+    public async Task SetupTryRunAsync_WithTaskKey_OnlyMatchesSpecifiedKey()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupTryRunAsync(returns: true, taskKey: "import-job");
@@ -68,7 +68,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     }
 
     [Fact]
-    public async Task SetupTryRunAsync_WithTaskName_DoesNotMatchOtherName()
+    public async Task SetupTryRunAsync_WithTaskKey_DoesNotMatchOtherKey()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupTryRunAsync(returns: true, taskKey: "import-job");
@@ -79,6 +79,21 @@ public class TaskStateManagerNSubstituteExtensionsTests
             cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
+    }
+
+    [Fact]
+    public async Task SetupTryRunAsync_WithObjectKey_RunsWork()
+    {
+        var sub = Substitute.For<ITaskStateManager>();
+        sub.SetupTryRunAsync(returns: true, taskKey: 42);
+
+        var workRan = false;
+        var result = await sub.TryRunAsync(42,
+            _ => { workRan = true; return Task.CompletedTask; },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result);
+        Assert.True(workRan);
     }
 
     // ── SetupTryRunAsync<T> ───────────────────────────────────────────────────
@@ -100,12 +115,26 @@ public class TaskStateManagerNSubstituteExtensionsTests
     }
 
     [Fact]
-    public async Task SetupTryRunAsync_Generic_WithTaskName_OnlyMatchesSpecifiedName()
+    public async Task SetupTryRunAsync_Generic_WithTaskKey_OnlyMatchesSpecifiedKey()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupTryRunAsync(value: 99, taskKey: "my-job");
 
         var result = await sub.TryRunAsync<int>("my-job",
+            _ => Task.FromResult(0),
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Started);
+        Assert.Equal(99, result.Value);
+    }
+
+    [Fact]
+    public async Task SetupTryRunAsync_Generic_WithObjectKey_RunsWorkAndReturnsRanWithValue()
+    {
+        var sub = Substitute.For<ITaskStateManager>();
+        sub.SetupTryRunAsync(value: 99, taskKey: 42);
+
+        var result = await sub.TryRunAsync<int>(42,
             _ => Task.FromResult(0),
             cancellationToken: TestContext.Current.CancellationToken);
 
@@ -131,7 +160,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     }
 
     [Fact]
-    public async Task SetupTryRunAsyncToSkip_WithTaskName_OnlyMatchesSpecifiedName()
+    public async Task SetupTryRunAsyncToSkip_WithTaskKey_OnlyMatchesSpecifiedKey()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupTryRunAsyncToSkip<int>(taskKey: "skip-job");
@@ -141,6 +170,21 @@ public class TaskStateManagerNSubstituteExtensionsTests
             cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TryRunResult<int>.Skipped, result);
+    }
+
+    [Fact]
+    public async Task SetupTryRunAsyncToSkip_WithObjectKey_ReturnsSkipped()
+    {
+        var sub = Substitute.For<ITaskStateManager>();
+        sub.SetupTryRunAsyncToSkip<int>(taskKey: 42);
+
+        var workRan = false;
+        var result = await sub.TryRunAsync<int>(42,
+            _ => { workRan = true; return Task.FromResult(0); },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(TryRunResult<int>.Skipped, result);
+        Assert.False(workRan);
     }
 
     // ── SetupRunAsync ─────────────────────────────────────────────────────────
@@ -176,7 +220,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     }
 
     [Fact]
-    public async Task SetupRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
+    public async Task SetupRunAsync_WithTaskKey_OnlyMatchesSpecifiedKey()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupRunAsync(taskKey: "export-job");
@@ -189,10 +233,24 @@ public class TaskStateManagerNSubstituteExtensionsTests
         Assert.True(workRan);
     }
 
+    [Fact]
+    public async Task SetupRunAsync_WithObjectKey_RunsWork()
+    {
+        var sub = Substitute.For<ITaskStateManager>();
+        sub.SetupRunAsync(taskKey: 42);
+
+        var workRan = false;
+        await sub.RunAsync(42,
+            _ => { workRan = true; return Task.CompletedTask; },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(workRan);
+    }
+
     // ── Received() still works after setup ───────────────────────────────────
 
     [Fact]
-    public async Task SetupTryRunAsync_ReceivedByTaskName_Works()
+    public async Task SetupTryRunAsync_ReceivedByTaskKey_Works()
     {
         var sub = Substitute.For<ITaskStateManager>();
         sub.SetupTryRunAsync(returns: true);
