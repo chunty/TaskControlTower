@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>TaskTurnstile.Testing</PackageId>
+    <Description>
+      Framework-agnostic test double for TaskTurnstile. Provides FakeTaskStateManager,
+      an in-memory implementation of ITaskStateManager that executes work inline — no
+      mocking framework required.
+    </Description>
+    <PackageTags>Concurrency, Background Tasks, Named Lock, Testing, Fake, Test Double</PackageTags>
+    <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NugetREADME.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskTurnstile.csproj" />
+  </ItemGroup>
+
+</Project>

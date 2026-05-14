@@ -9,7 +9,7 @@
     <PackageTags>Concurrency, Background Tasks, Named Lock, Task Manager, Distributed Cache, Job Guard</PackageTags>
     <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
     <!-- Prevent this project from globbing files in nested sub-projects -->
-    <DefaultItemExcludes>$(DefaultItemExcludes);TaskTurnstile.Redis\**;TaskTurnstile.SqlServer\**;TaskTurnstile.Tests\**;samples\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);TaskTurnstile.Redis\**;TaskTurnstile.SqlServer\**;TaskTurnstile.Testing\**;TaskTurnstile.Tests\**;samples\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskTurnstile.csproj" />
+    <ProjectReference Include="..\TaskTurnstile.Testing\TaskTurnstile.Testing.csproj" />
   </ItemGroup>
 
 </Project>
