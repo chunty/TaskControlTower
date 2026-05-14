@@ -57,7 +57,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     public async Task SetupTryRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var sub = Substitute.For<ITaskStateManager>();
-        sub.SetupTryRunAsync(returns: true, taskName: "import-job");
+        sub.SetupTryRunAsync(returns: true, taskKey: "import-job");
 
         var workRan = false;
         await sub.TryRunAsync("import-job",
@@ -71,7 +71,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     public async Task SetupTryRunAsync_WithTaskName_DoesNotMatchOtherName()
     {
         var sub = Substitute.For<ITaskStateManager>();
-        sub.SetupTryRunAsync(returns: true, taskName: "import-job");
+        sub.SetupTryRunAsync(returns: true, taskKey: "import-job");
 
         // No setup for "other-job" — returns default (false)
         var result = await sub.TryRunAsync("other-job",
@@ -103,7 +103,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     public async Task SetupTryRunAsync_Generic_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var sub = Substitute.For<ITaskStateManager>();
-        sub.SetupTryRunAsync(value: 99, taskName: "my-job");
+        sub.SetupTryRunAsync(value: 99, taskKey: "my-job");
 
         var result = await sub.TryRunAsync<int>("my-job",
             _ => Task.FromResult(0),
@@ -134,7 +134,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     public async Task SetupTryRunAsyncToSkip_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var sub = Substitute.For<ITaskStateManager>();
-        sub.SetupTryRunAsyncToSkip<int>(taskName: "skip-job");
+        sub.SetupTryRunAsyncToSkip<int>(taskKey: "skip-job");
 
         var result = await sub.TryRunAsync<int>("skip-job",
             _ => Task.FromResult(0),
@@ -179,7 +179,7 @@ public class TaskStateManagerNSubstituteExtensionsTests
     public async Task SetupRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var sub = Substitute.For<ITaskStateManager>();
-        sub.SetupRunAsync(taskName: "export-job");
+        sub.SetupRunAsync(taskKey: "export-job");
 
         var workRan = false;
         await sub.RunAsync("export-job",

@@ -11,13 +11,13 @@ namespace TaskTurnstile.Testing;
 /// <code>
 /// // Before
 /// manager.TryRunAsync(
-///         Arg.Any&lt;string&gt;(),
+///         Arg.Any&lt;object&gt;(),
 ///         Arg.Any&lt;Func&lt;CancellationToken, Task&gt;&gt;(),
 ///         Arg.Any&lt;TimeSpan?&gt;(),
 ///         Arg.Any&lt;CancellationToken&gt;())
 ///     .Returns(async ci =>
 ///     {
-///         await ci.Arg&lt;Func&lt;CancellationToken, Task&gt;&gt;()(CancellationToken.None);
+///         await ci.Arg&lt;Func&lt;CancellationToken, Task&gt;&gt;()(ci.Arg&lt;CancellationToken&gt;());
 ///         return true;
 ///     });
 ///
@@ -28,7 +28,7 @@ namespace TaskTurnstile.Testing;
 public static class TaskStateManagerNSubstituteExtensions
 {
     /// <summary>
-    /// Sets up <see cref="ITaskStateManager.TryRunAsync(string, Func{CancellationToken, Task}, TimeSpan?, CancellationToken)"/>.
+    /// Sets up <see cref="ITaskStateManager.TryRunAsync(object, Func{CancellationToken, Task}, TimeSpan?, CancellationToken)"/>.
     /// When <paramref name="returns"/> is <c>true</c>, the <c>work</c> delegate is invoked and the call returns <c>true</c>.
     /// When <paramref name="returns"/> is <c>false</c>, work is skipped and the call returns <c>false</c>.
     /// </summary>
@@ -36,22 +36,22 @@ public static class TaskStateManagerNSubstituteExtensions
     /// <param name="returns">
     /// Whether the substitute should run the work and return <c>true</c>, or skip and return <c>false</c>.
     /// </param>
-    /// <param name="taskName">
-    /// The task name to match. When <c>null</c> (default), matches any task name.
+    /// <param name="taskKey">
+    /// The task key to match. When <c>null</c> (default), matches any key.
     /// </param>
     public static ConfiguredCall SetupTryRunAsync(
         this ITaskStateManager manager,
         bool returns,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var configuredCall = taskName is null
+        var configuredCall = taskKey is null
             ? manager.TryRunAsync(
-                Arg.Any<string>(),
+                Arg.Any<object>(),
                 Arg.Any<Func<CancellationToken, Task>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>())
             : manager.TryRunAsync(
-                taskName,
+                taskKey,
                 Arg.Any<Func<CancellationToken, Task>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>());
@@ -69,27 +69,27 @@ public static class TaskStateManagerNSubstituteExtensions
     }
 
     /// <summary>
-    /// Sets up <see cref="ITaskStateManager.TryRunAsync{T}(string, Func{CancellationToken, Task{T}}, TimeSpan?, CancellationToken)"/>
+    /// Sets up <see cref="ITaskStateManager.TryRunAsync{T}(object, Func{CancellationToken, Task{T}}, TimeSpan?, CancellationToken)"/>
     /// to run the work delegate and return <see cref="TryRunResult{T}.Ran"/> wrapping <paramref name="value"/>.
     /// </summary>
     /// <param name="manager">The NSubstitute substitute to configure.</param>
     /// <param name="value">The value to wrap in <see cref="TryRunResult{T}.Ran"/>.</param>
-    /// <param name="taskName">
-    /// The task name to match. When <c>null</c> (default), matches any task name.
+    /// <param name="taskKey">
+    /// The task key to match. When <c>null</c> (default), matches any key.
     /// </param>
     public static ConfiguredCall SetupTryRunAsync<T>(
         this ITaskStateManager manager,
         T value,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var configuredCall = taskName is null
+        var configuredCall = taskKey is null
             ? manager.TryRunAsync(
-                Arg.Any<string>(),
+                Arg.Any<object>(),
                 Arg.Any<Func<CancellationToken, Task<T>>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>())
             : manager.TryRunAsync(
-                taskName,
+                taskKey,
                 Arg.Any<Func<CancellationToken, Task<T>>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>());
@@ -102,25 +102,25 @@ public static class TaskStateManagerNSubstituteExtensions
     }
 
     /// <summary>
-    /// Sets up <see cref="ITaskStateManager.TryRunAsync{T}(string, Func{CancellationToken, Task{T}}, TimeSpan?, CancellationToken)"/>
+    /// Sets up <see cref="ITaskStateManager.TryRunAsync{T}(object, Func{CancellationToken, Task{T}}, TimeSpan?, CancellationToken)"/>
     /// to skip work and return <see cref="TryRunResult{T}.Skipped"/>.
     /// </summary>
     /// <param name="manager">The NSubstitute substitute to configure.</param>
-    /// <param name="taskName">
-    /// The task name to match. When <c>null</c> (default), matches any task name.
+    /// <param name="taskKey">
+    /// The task key to match. When <c>null</c> (default), matches any key.
     /// </param>
     public static ConfiguredCall SetupTryRunAsyncToSkip<T>(
         this ITaskStateManager manager,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var configuredCall = taskName is null
+        var configuredCall = taskKey is null
             ? manager.TryRunAsync(
-                Arg.Any<string>(),
+                Arg.Any<object>(),
                 Arg.Any<Func<CancellationToken, Task<T>>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>())
             : manager.TryRunAsync(
-                taskName,
+                taskKey,
                 Arg.Any<Func<CancellationToken, Task<T>>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>());
@@ -132,21 +132,21 @@ public static class TaskStateManagerNSubstituteExtensions
     /// Sets up <see cref="ITaskStateManager.RunAsync"/> to invoke the work delegate.
     /// </summary>
     /// <param name="manager">The NSubstitute substitute to configure.</param>
-    /// <param name="taskName">
-    /// The task name to match. When <c>null</c> (default), matches any task name.
+    /// <param name="taskKey">
+    /// The task key to match. When <c>null</c> (default), matches any key.
     /// </param>
     public static ConfiguredCall SetupRunAsync(
         this ITaskStateManager manager,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var configuredCall = taskName is null
+        var configuredCall = taskKey is null
             ? manager.RunAsync(
-                Arg.Any<string>(),
+                Arg.Any<object>(),
                 Arg.Any<Func<CancellationToken, Task>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>())
             : manager.RunAsync(
-                taskName,
+                taskKey,
                 Arg.Any<Func<CancellationToken, Task>>(),
                 Arg.Any<TimeSpan?>(),
                 Arg.Any<CancellationToken>());

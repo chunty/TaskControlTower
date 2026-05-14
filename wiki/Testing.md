@@ -45,13 +45,13 @@ manager.SetupTryRunAsync(value: 42);
 manager.SetupTryRunAsyncToSkip<int>();
 ```
 
-### Matching a specific task name
+### Matching a specific task key
 
-Pass `taskName` to make the setup match only that name. Any other name falls through to the Moq / NSubstitute default. This is useful when the thing you're testing is *which* name gets passed:
+Pass `taskKey` to make the setup match only that key. Any other key falls through to the Moq / NSubstitute default. This is useful when the thing you're testing is *which* key gets passed:
 
 ```csharp
 // Moq
-Mocker.GetMock<ITaskStateManager>().SetupTryRunAsync(returns: true, taskName: "import-job");
+Mocker.GetMock<ITaskStateManager>().SetupTryRunAsync(returns: true, taskKey: "import-job");
 
 // Verify the correct name was used
 Mocker.GetMock<ITaskStateManager>()
@@ -64,7 +64,7 @@ Mocker.GetMock<ITaskStateManager>()
 
 ```csharp
 // NSubstitute
-manager.SetupTryRunAsync(returns: true, taskName: "import-job");
+manager.SetupTryRunAsync(returns: true, taskKey: "import-job");
 
 await manager.Received(1).TryRunAsync(
     "import-job",

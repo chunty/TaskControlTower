@@ -57,7 +57,7 @@ public class TaskStateManagerMoqExtensionsTests
     public async Task SetupTryRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var mock = new Mock<ITaskStateManager>();
-        mock.SetupTryRunAsync(returns: true, taskName: "import-job");
+        mock.SetupTryRunAsync(returns: true, taskKey: "import-job");
 
         var workRan = false;
         await mock.Object.TryRunAsync("import-job",
@@ -71,7 +71,7 @@ public class TaskStateManagerMoqExtensionsTests
     public async Task SetupTryRunAsync_WithTaskName_DoesNotMatchOtherName()
     {
         var mock = new Mock<ITaskStateManager>();
-        mock.SetupTryRunAsync(returns: true, taskName: "import-job");
+        mock.SetupTryRunAsync(returns: true, taskKey: "import-job");
 
         // No setup for "other-job" — returns default (false)
         var result = await mock.Object.TryRunAsync("other-job",
@@ -103,7 +103,7 @@ public class TaskStateManagerMoqExtensionsTests
     public async Task SetupTryRunAsync_Generic_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var mock = new Mock<ITaskStateManager>();
-        mock.SetupTryRunAsync(value: 99, taskName: "my-job");
+        mock.SetupTryRunAsync(value: 99, taskKey: "my-job");
 
         var result = await mock.Object.TryRunAsync<int>("my-job",
             _ => Task.FromResult(0),
@@ -134,7 +134,7 @@ public class TaskStateManagerMoqExtensionsTests
     public async Task SetupTryRunAsyncToSkip_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var mock = new Mock<ITaskStateManager>();
-        mock.SetupTryRunAsyncToSkip<int>(taskName: "skip-job");
+        mock.SetupTryRunAsyncToSkip<int>(taskKey: "skip-job");
 
         var result = await mock.Object.TryRunAsync<int>("skip-job",
             _ => Task.FromResult(0),
@@ -179,7 +179,7 @@ public class TaskStateManagerMoqExtensionsTests
     public async Task SetupRunAsync_WithTaskName_OnlyMatchesSpecifiedName()
     {
         var mock = new Mock<ITaskStateManager>();
-        mock.SetupRunAsync(taskName: "export-job");
+        mock.SetupRunAsync(taskKey: "export-job");
 
         var workRan = false;
         await mock.Object.RunAsync("export-job",

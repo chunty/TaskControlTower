@@ -1,8 +1,6 @@
-﻿using TaskTurnstile.DependencyInjection;
-using TaskTurnstile.Stores;
+﻿using TaskTurnstile.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;

@@ -13,3 +13,4 @@ A thread-safe named task lifecycle manager for .NET. Prevents duplicate backgrou
 | [Patterns](Patterns) | Real-world usage examples — Coravel, BackgroundService, manual start/stop |
 | [Testing](Testing) | `FakeTaskStateManager` and manual mocking with Moq / NSubstitute |
 | [Custom Store](Custom-Store) | Implementing `ITaskStateStore` to back the manager with any storage |
+| [Migrating to v2](Migrating-to-v2) | Breaking changes and migration guide for v2.0 |

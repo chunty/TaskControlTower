@@ -8,6 +8,29 @@ public class ImportJob(ITaskStateManager manager) { ... }
 
 ---
 
+## Task keys
+
+Every method accepts an `object taskKey` to identify the task. The key is converted to a string for storage:
+
+| Key type | Stored as |
+|---|---|
+| `string` | used as-is |
+| Primitives, enums, `Guid`, `DateTime`, etc. | `{TypeFullName}:{value}` e.g. `System.Int32:42` |
+| Any other object | `{TypeFullName}:{sha256-of-json}` |
+
+```csharp
+// String key — recommended for simple cases
+await manager.TryRunAsync("import-job", DoWorkAsync);
+
+// Typed key — useful when the key is a domain object
+await manager.TryRunAsync(new JobKey { TenantId = 42, Type = "import" }, DoWorkAsync);
+
+// Primitive key
+await manager.TryRunAsync(tenantId, DoWorkAsync); // e.g. System.Int32:42
+```
+
+---
+
 ## TryRunAsync — run or skip
 
 The recommended method for most scenarios. Starts the task, runs the work, and stops it. Returns `false` immediately if the task is already running.

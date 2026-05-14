@@ -48,16 +48,16 @@ public static class TaskStateManagerMoqExtensions
     public static IReturnsResult<ITaskStateManager> SetupTryRunAsync(
         this Mock<ITaskStateManager> mock,
         bool returns,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var setup = taskName is null
+        var setup = taskKey is null
             ? mock.Setup(m => m.TryRunAsync(
-                It.IsAny<string>(),
+                It.IsAny<object>(),
                 It.IsAny<Func<CancellationToken, Task>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()))
             : mock.Setup(m => m.TryRunAsync(
-                taskName,
+                taskKey,
                 It.IsAny<Func<CancellationToken, Task>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()));
@@ -87,16 +87,16 @@ public static class TaskStateManagerMoqExtensions
     public static IReturnsResult<ITaskStateManager> SetupTryRunAsync<T>(
         this Mock<ITaskStateManager> mock,
         T value,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var setup = taskName is null
+        var setup = taskKey is null
             ? mock.Setup(m => m.TryRunAsync(
-                It.IsAny<string>(),
+                It.IsAny<object>(),
                 It.IsAny<Func<CancellationToken, Task<T>>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()))
             : mock.Setup(m => m.TryRunAsync(
-                taskName,
+                taskKey,
                 It.IsAny<Func<CancellationToken, Task<T>>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()));
@@ -119,16 +119,16 @@ public static class TaskStateManagerMoqExtensions
     /// </param>
     public static IReturnsResult<ITaskStateManager> SetupTryRunAsyncToSkip<T>(
         this Mock<ITaskStateManager> mock,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var setup = taskName is null
+        var setup = taskKey is null
             ? mock.Setup(m => m.TryRunAsync(
-                It.IsAny<string>(),
+                It.IsAny<object>(),
                 It.IsAny<Func<CancellationToken, Task<T>>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()))
             : mock.Setup(m => m.TryRunAsync(
-                taskName,
+                taskKey,
                 It.IsAny<Func<CancellationToken, Task<T>>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()));
@@ -145,16 +145,16 @@ public static class TaskStateManagerMoqExtensions
     /// </param>
     public static IReturnsResult<ITaskStateManager> SetupRunAsync(
         this Mock<ITaskStateManager> mock,
-        string? taskName = null)
+        object? taskKey = null)
     {
-        var setup = taskName is null
+        var setup = taskKey is null
             ? mock.Setup(m => m.RunAsync(
-                It.IsAny<string>(),
+                It.IsAny<object>(),
                 It.IsAny<Func<CancellationToken, Task>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()))
             : mock.Setup(m => m.RunAsync(
-                taskName,
+                taskKey,
                 It.IsAny<Func<CancellationToken, Task>>(),
                 It.IsAny<TimeSpan?>(),
                 It.IsAny<CancellationToken>()));
