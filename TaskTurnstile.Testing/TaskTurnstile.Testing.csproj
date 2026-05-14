@@ -3,11 +3,11 @@
   <PropertyGroup>
     <PackageId>TaskTurnstile.Testing</PackageId>
     <Description>
-      Framework-agnostic test double for TaskTurnstile. Provides FakeTaskStateManager,
-      an in-memory implementation of ITaskStateManager that executes work inline — no
-      mocking framework required.
+      Test helpers for TaskTurnstile. Provides FakeTaskStateManager (framework-agnostic in-memory
+      test double) and setup extension methods for Moq and NSubstitute that eliminate boilerplate
+      when mocking ITaskStateManager methods that accept a Func delegate.
     </Description>
-    <PackageTags>Concurrency, Background Tasks, Named Lock, Testing, Fake, Test Double</PackageTags>
+    <PackageTags>Concurrency, Background Tasks, Named Lock, Testing, Fake, Test Double, Moq, NSubstitute</PackageTags>
     <PackageReadmeFile>NugetREADME.md</PackageReadmeFile>
   </PropertyGroup>
 
@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />
+    <PackageReference Include="Moq" PrivateAssets="all" />
+    <PackageReference Include="NSubstitute" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
