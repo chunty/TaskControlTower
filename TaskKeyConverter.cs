@@ -5,13 +5,23 @@ using System.Text.Json;
 namespace TaskTurnstile;
 
 /// <summary>
-/// Converts an <see cref="object"/> task key to the string used by the backing store.
-/// Strings are used as-is. All other types are serialized to JSON and hashed with SHA-256,
-/// prefixed with the type name so keys are identifiable in the database.
+/// Converts an <see cref="object"/> task key to the string stored in the backing store.
 /// </summary>
-internal static class TaskKeyConverter
+/// <remarks>
+/// Conversion rules:
+/// <list type="bullet">
+///   <item><description><see langword="string"/> — used as-is.</description></item>
+///   <item><description>Primitives, enums, <see cref="Guid"/>, <see cref="decimal"/>, <see cref="DateTime"/>, <see cref="DateOnly"/>, <see cref="TimeOnly"/>, <see cref="DateTimeOffset"/> — <c>{TypeFullName}:{value}</c>, e.g. <c>System.Int32:42</c>.</description></item>
+///   <item><description>All other types — JSON-serialised, SHA-256 hashed: <c>{TypeFullName}:{hex}</c>.</description></item>
+/// </list>
+/// Use this in tests to compute the expected store key when asserting against <see cref="ITaskStateStore"/>.
+/// </remarks>
+public static class TaskKeyConverter
 {
-    internal static string ToKey(object key)
+    /// <summary>
+    /// Converts <paramref name="key"/> to the string used by the backing store.
+    /// </summary>
+    public static string ToKey(object key)
     {
         if (key is string s) return s;
         var type = key.GetType();

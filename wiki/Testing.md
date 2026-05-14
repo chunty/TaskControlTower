@@ -50,10 +50,13 @@ manager.SetupTryRunAsyncToSkip<int>();
 Pass `taskKey` to make the setup match only that key. Any other key falls through to the Moq / NSubstitute default. This is useful when the thing you're testing is *which* key gets passed:
 
 ```csharp
-// Moq
+// Moq — string key
 Mocker.GetMock<ITaskStateManager>().SetupTryRunAsync(returns: true, taskKey: "import-job");
 
-// Verify the correct name was used
+// Moq — object key
+Mocker.GetMock<ITaskStateManager>().SetupTryRunAsync(returns: true, taskKey: new JobKey { TenantId = 42 });
+
+// Verify the correct key was used
 Mocker.GetMock<ITaskStateManager>()
     .Verify(m => m.TryRunAsync(
         "import-job",
@@ -73,6 +76,26 @@ await manager.Received(1).TryRunAsync(
     Arg.Any<CancellationToken>());
 ```
 
+### Resolving object keys in store-level assertions
+
+When asserting on `ITaskStateStore` calls directly (e.g., in custom store tests), you need the resolved string key. Use `TaskKeyConverter.ToKey` to compute it:
+
+```csharp
+using TaskTurnstile;
+
+var key = new JobKey { TenantId = 42 };
+var storeKey = TaskKeyConverter.ToKey(key); // e.g. "MyApp.JobKey:a3f9..."
+
+storeMock.Verify(s => s.SetRunningAsync(storeKey, It.IsAny<TimeSpan?>(), It.IsAny<CancellationToken>()));
+```
+
+For string and primitive keys:
+
+```csharp
+TaskKeyConverter.ToKey("import-job")  // → "import-job"
+TaskKeyConverter.ToKey(42)            // → "System.Int32:42"
+```
+
 ---
 
 ## Manual mocking (without TaskTurnstile.Testing)
@@ -84,11 +107,11 @@ If you prefer to wire up your mocking framework directly without the helper exte
 ```csharp
 Mocker.GetMock<ITaskStateManager>()
     .Setup(m => m.TryRunAsync(
-        It.IsAny<string>(),
+        It.IsAny<object>(),
         It.IsAny<Func<CancellationToken, Task>>(),
         It.IsAny<TimeSpan?>(),
         It.IsAny<CancellationToken>()))
-    .Returns<string, Func<CancellationToken, Task>, TimeSpan?, CancellationToken>(
+    .Returns<object, Func<CancellationToken, Task>, TimeSpan?, CancellationToken>(
         async (_, work, _, ct) => { await work(ct); return true; });
 ```
 
@@ -97,7 +120,7 @@ Mocker.GetMock<ITaskStateManager>()
 ```csharp
 Mocker.GetMock<ITaskStateManager>()
     .Setup(m => m.TryRunAsync(
-        It.IsAny<string>(),
+        It.IsAny<object>(),
         It.IsAny<Func<CancellationToken, Task>>(),
         It.IsAny<TimeSpan?>(),
         It.IsAny<CancellationToken>()))
@@ -108,7 +131,7 @@ Mocker.GetMock<ITaskStateManager>()
 
 ```csharp
 manager.TryRunAsync(
-        Arg.Any<string>(),
+        Arg.Any<object>(),
         Arg.Any<Func<CancellationToken, Task>>(),
         Arg.Any<TimeSpan?>(),
         Arg.Any<CancellationToken>())

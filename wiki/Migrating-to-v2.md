@@ -52,3 +52,4 @@ If you were calling these extension methods they will need updating to call the 
 
 - **Object task keys** — pass any type as a task key. Strings are unchanged; primitives, enums, `Guid`, `DateTime`, and other value types use `ToString()` prefixed with the type name; complex objects are JSON-serialised and SHA-256 hashed.
 - Keys are always human-readable in the database (type name prefix makes them identifiable).
+- **`TaskKeyConverter.ToKey(object key)`** is public — use it in tests to resolve the expected store key when asserting against `ITaskStateStore`.
