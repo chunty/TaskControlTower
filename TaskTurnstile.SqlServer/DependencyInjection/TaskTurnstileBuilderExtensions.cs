@@ -8,7 +8,7 @@ public static class TaskTurnstileBuilderExtensions
     /// <summary>
     /// Uses a dedicated SQL Server distributed cache as the backing store, isolated from any
     /// other distributed cache the app may have registered.
-    /// The cache table is created automatically on first startup if it does not already exist.
+    /// The cache table is created automatically on first use if it does not already exist.
     /// </summary>
     /// <example>
     /// services.AddTaskTurnstile()
@@ -23,10 +23,19 @@ public static class TaskTurnstileBuilderExtensions
         this TaskTurnstileBuilder builder,
         Action<SqlServerCacheOptions> configure)
     {
+        var options = new SqlServerCacheOptions();
+        configure(options);
+
+        ArgumentException.ThrowIfNullOrEmpty(options.ConnectionString, nameof(options.ConnectionString));
+        options.SchemaName ??= "dbo";
+        options.TableName ??= "ActiveTasks";
+
         return builder.AddDistributedStore(_ =>
         {
-            var options = new SqlServerCacheOptions();
-            configure(options);
+            SqlServerTableInitializer
+                .EnsureTableExistsAsync(options.ConnectionString, options.SchemaName, options.TableName)
+                .GetAwaiter().GetResult();
+
             return new SqlServerCache(options);
         });
     }

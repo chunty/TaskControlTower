@@ -1,15 +1,15 @@
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Hosting;
 using System.Data;
 
 namespace TaskTurnstile.SqlServer;
 
-internal sealed class SqlServerTableInitializerHostedService(
-    string connectionString,
-    string schemaName,
-    string tableName) : IHostedService
+internal static class SqlServerTableInitializer
 {
-    public async Task StartAsync(CancellationToken cancellationToken)
+    internal static async Task EnsureTableExistsAsync(
+        string connectionString,
+        string schemaName,
+        string tableName,
+        CancellationToken cancellationToken = default)
     {
         var quotedTable = $"[{schemaName.Replace("]", "]]")}].[{tableName.Replace("]", "]]")}]";
         var escapedSchema = schemaName.Replace("'", "''");
@@ -55,6 +55,4 @@ internal sealed class SqlServerTableInitializerHostedService(
             throw;
         }
     }
-
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

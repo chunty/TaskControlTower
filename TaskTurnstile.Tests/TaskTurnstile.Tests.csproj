@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -22,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskTurnstile.csproj" />
+    <ProjectReference Include="..\TaskTurnstile.SqlServer\TaskTurnstile.SqlServer.csproj" />
     <ProjectReference Include="..\TaskTurnstile.Testing\TaskTurnstile.Testing.csproj" />
   </ItemGroup>
 
